@@ -17,17 +17,19 @@ function runServer(content) {
 let credentials = vcapServices.findCredentials({ instance: { tags: 'SQS' } });
 
 if (Object.keys(credentials).length > 0) {
+    // TODO configure actual credentials after we implement bind
+    AWS.config.update({region: 'us-west-2'});
     AWS.config.credentials = {
-        region: credentials.region_name,
+        region: "us-west-2",
     }
     queue_url = credentials.url
 
-    sqs = new AWS.SQS({ apiVersion: '2006-03-01' })
+    sqs = new AWS.SQS({ apiVersion: '2012-11-05' })
     sqs.listQueues({}, (err, data) => {
         if (err) {
             console.error("Failed listing queues", err)
         } else {
-            if !data.QueueUrls.includes(queue_url) {
+            if (!data.QueueUrls.includes(queue_url)) {
               console.error(`Failed to find queue with url ${queue_url}`, err)
             } else {
               runServer(data)
@@ -37,5 +39,3 @@ if (Object.keys(credentials).length > 0) {
 } else {
     console.error("No SQS creds in vcap_services")
 }
-
-// push app with no-start, bind to a queue and then start. See what happens

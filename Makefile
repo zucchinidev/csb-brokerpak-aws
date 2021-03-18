@@ -26,6 +26,7 @@ SECURITY_USER_NAME := $(or $(SECURITY_USER_NAME), aws-broker)
 SECURITY_USER_PASSWORD := $(or $(SECURITY_USER_PASSWORD), aws-broker-pw)
 #GSB_API_HOSTNAME := $(or $(GSB_API_HOSTNAME), host.docker.internal)
 PARALLEL_JOB_COUNT := $(or $(PARALLEL_JOB_COUNT), 2)
+GSB_PROVISION_DEFAULTS := $(or $(GSB_PROVISION_DEFAULTS), {"aws_vpc_id": "$(AWS_PAS_VPC_ID)", "region": $(REGION)})
 
 .PHONY: run
 run: build aws_access_key_id aws_secret_access_key ## start broker with this brokerpak
@@ -37,6 +38,7 @@ run: build aws_access_key_id aws_secret_access_key ## start broker with this bro
     -e AWS_SECRET_ACCESS_KEY \
 	-e "DB_TYPE=sqlite3" \
 	-e "DB_PATH=/tmp/csb-db" \
+	-e "GSB_DEBUG=true" \
 	-e GSB_PROVISION_DEFAULTS \
 	$(CSB) serve
 
@@ -58,6 +60,16 @@ run-examples: ## run examples in yml files. Runs examples for all services by de
 	-e SECURITY_USER_PASSWORD \
 	-e USER \
 	$(CSB) client run-examples --service-name=$(service_name) --example-name=$(example_name) -j $(PARALLEL_JOB_COUNT)
+
+	###### config-show ###################################################################
+
+.PHONY: config-show
+config-show: ## show broker configuration
+		docker run $(DOCKER_OPTS) \
+		-e SECURITY_USER_NAME \
+		-e SECURITY_USER_PASSWORD \
+		-e USER \
+		$(CSB) config show
 
 ###### info ###################################################################
 
@@ -83,7 +95,9 @@ cloud-service-broker:
 
 APP_NAME := $(or $(APP_NAME), cloud-service-broker-aws)
 DB_TLS := $(or $(DB_TLS), skip-verify)
-GSB_PROVISION_DEFAULTS := $(or $(GSB_PROVISION_DEFAULTS), {"aws_vpc_id": "$(AWS_PAS_VPC_ID)"})
+REGION := $(or $(AWS_REGION), "us-west-2")
+
+GSB_PROVISION_DEFAULTS := $(or $(GSB_PROVISION_DEFAULTS), {"aws_vpc_id": "$(AWS_PAS_VPC_ID)", "region": $(REGION)})
 
 .PHONY: push-broker
 push-broker: cloud-service-broker build aws_access_key_id aws_secret_access_key aws_pas_vpc_id ## push the broker with this brokerpak

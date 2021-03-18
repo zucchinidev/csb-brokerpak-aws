@@ -9,12 +9,12 @@
   },
   "keywords": [
     "AWS",
-    "S3"
+    "SQS"
   ],
   "author": "Marcela Campo",
   "license": "Apache-2.0",
   "dependencies": {
-    "aws-sdk": "^2.663.0",
+    "aws-sdk": "^2.866.0",
     "restify": "^8.5.1",
     "vcap_services": "^0.7.1"
   }

@@ -28,13 +28,9 @@ env_config_mapping:
   AWS_ACCESS_KEY_ID: aws.access_key_id
   AWS_SECRET_ACCESS_KEY: aws.secret_access_key
 service_definitions:
-# - aws-mysql.yml
-# - aws-redis-cluster.yml
-# - aws-postgresql.yml
-# - aws-s3-bucket.yml
-# - aws-dynamodb.yml
+- aws-mysql.yml
+- aws-redis-cluster.yml
+- aws-postgresql.yml
+- aws-s3-bucket.yml
+- aws-dynamodb.yml
 - aws-sqs.yml
-
-
-
-

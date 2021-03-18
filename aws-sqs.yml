@@ -83,6 +83,29 @@ provision:
       type: string
       details: AWS secret key
       default: ${config("aws.secret_access_key")}
+    - field_name: delay_seconds
+      type: number
+      details: The time in seconds that the delivery of all messages in the queue will be delayed.
+      default: 0
+    - field_name: max_message_size
+      type: number
+      details: The limit of how many bytes a message can contain before Amazon SQS rejects it.
+      default: 262144
+    - field_name: message_retention_seconds
+      type: number
+      details: The number of seconds Amazon SQS retains a message.
+      default: 345600
+    - field_name: receive_wait_time_seconds
+      type: number
+      details: The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning.
+      default: 0
+    - field_name: visibility_timeout_seconds
+      type: number
+      details: The visibility timeout for the queue.
+      default: 30
+    - field_name: redrive_policy
+      details: 'The JSON hash for the policy to set up the Dead Letter Queue. E.g. { "deadLetterTargetArn": "valid-queue-arn" , "maxReceiveCount": 10 }'
+      type: object
   computed_inputs:
   - name: labels
     default: ${json.marshal(request.default_labels)}
@@ -100,6 +123,9 @@ provision:
   - field_name: url
     type: string
     details: URL for the queue
+  - field_name: name
+    type: string
+    details: name for the queue
   - field_name: region
     type: string
     details: AWS region for the queue
@@ -114,6 +140,11 @@ examples:
   description: Standard SQS
   plan_id: d58c63eb-f468-4dad-98ca-e735cc5d352f
   provision_params: {}
+  bind_params: {}
+- name: sqs-standard-long-polling
+  description: Standard Long Polling SQS
+  plan_id: d58c63eb-f468-4dad-98ca-e735cc5d352f
+  provision_params: {receive_wait_time_seconds: 20}
   bind_params: {}
 - name: sqs-fifo
   description: FIFO SQS

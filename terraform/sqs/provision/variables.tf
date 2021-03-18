@@ -15,3 +15,14 @@
 variable fifo { type = bool }
 variable instance_name { type = string }
 variable labels { type = map }
+variable delay_seconds { type = number }
+variable max_message_size { type = number }
+variable message_retention_seconds { type = number }
+variable receive_wait_time_seconds { type = number }
+variable visibility_timeout_seconds { type = number }
+variable redrive_policy { type = object(
+  {
+      deadLetterTargetArn = string
+      maxReceiveCount = number
+    }
+  )}
