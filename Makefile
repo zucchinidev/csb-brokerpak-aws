@@ -116,7 +116,7 @@ run-examples: ## run examples in yml files. Runs examples for all services by de
 .PHONY: test
 test: run-integration-tests ## run the tests
 
-.PHONY: run-integration-tests
+.PHONY: lint run-integration-tests
 run-integration-tests: latest-csb ## run integration tests for this brokerpak
 	cd ./integration-tests && go run github.com/onsi/ginkgo/v2/ginkgo -r .
 
@@ -183,7 +183,7 @@ $(PAK_CACHE):
 
 .PHONY: latest-csb
 latest-csb: ## point to the very latest CSB on GitHub
-	$(GO) get -d github.com/zucchinidev/cloud-service-broker@fix_initial_terraform_state_test_framework
+	$(GO) get -d github.com/cloudfoundry/cloud-service-broker@main
 	$(GO) mod tidy
 
 .PHONY: local-csb
