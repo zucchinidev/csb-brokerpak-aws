@@ -183,7 +183,7 @@ $(PAK_CACHE):
 
 .PHONY: latest-csb
 latest-csb: ## point to the very latest CSB on GitHub
-	$(GO) go get -d github.com/zucchinidev/cloud-service-broker@fix_initial_terraform_state_test_framework
+	$(GO) get -d github.com/zucchinidev/cloud-service-broker@fix_initial_terraform_state_test_framework
 	$(GO) mod tidy
 
 .PHONY: local-csb
